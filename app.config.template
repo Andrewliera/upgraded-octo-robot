@@ -1,0 +1,5 @@
+[secrets]
+baseurl = https://{your-wufoo-domain}.wufoo.com/api/v3/
+apikey = {Your-wufoo-api-key}
+identifier = forms/{your-wufoo-form-Identifier}
+passwd = {any-passphrase}

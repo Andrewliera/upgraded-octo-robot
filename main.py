@@ -1,17 +1,18 @@
-import requests
 import configparser
+import urllib.request
+import json
 
 
 class BadInput(Exception):
     print("Bad input used in program")
 
 
-class BadKeyConfig(Exception):
+class BadConfig(Exception):
     print("Bad Key Configured")
 
 
-class NewError(Exception):
-    print("New Error raised")
+class GetFormError(Exception):
+    print("New Error raised getting form")
 
 
 class TempKey:
@@ -19,17 +20,27 @@ class TempKey:
         config = configparser.ConfigParser()
         config.read('app.config')
         config.sections()
-        key = config['secrets']['apikey']
-    except BadKeyConfig:
-        raise BadKeyConfig
+        baseurl = config['secrets']['baseurl']
+        apikey = config['secrets']['apikey']
+        identifier = config['secrets']['identifier']
+        passwd = config['secrets']['passwd']
+    except BadConfig:
+        raise BadConfig
 
 
 def get_form_info():
     try:
-        response = requests.get('http://agonz.wufoo.com/api/v3/forms/{}/entries.json'.format(TempKey.key))
-        print(response)
-    except NewError:
-        raise NewError
+        password_manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+        password_manager.add_password(None, TempKey.baseurl, TempKey.apikey, TempKey.passwd)
+        handler = urllib.request.HTTPBasicAuthHandler(password_manager)
+        opener = urllib.request.build_opener(handler)
+        urllib.request.install_opener(opener)
+
+        response = urllib.request.urlopen(TempKey.baseurl + TempKey.identifier + '/entries.json')
+        return response
+
+    except GetFormError:
+        raise GetFormError
 
 
 if __name__ == '__main__':
@@ -40,7 +51,9 @@ if __name__ == '__main__':
         while start_prog == 'c':
             user_input = input("Would you like to Check your Wufoo Form?\ny key to continue\n other keys to exit\nYour Input: ")
             if user_input == 'y':
-                get_form_info()
+                api_output = get_form_info()
+                data = json.load(api_output)
+                print(json.dumps(data, indent=4, sort_keys=True))
             else:
                 start_prog = input("To continue press c\n other keys to exit\nYour Input: ")
 
@@ -48,7 +61,3 @@ if __name__ == '__main__':
 
     except BadInput:
         raise BadInput()
-        pass
-
-
-
