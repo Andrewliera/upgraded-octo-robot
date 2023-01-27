@@ -16,6 +16,7 @@
 2. add an app.config file to your copy of the project
 3. use app.config.template as a guide to fill app.config
 4. run main.py
+5. Entries will be stored in the saved_entries/ directory
 
 --------------------------------------------------------------
 
@@ -23,4 +24,4 @@
 
 > A test_functions.py file is there to test the functions of the project use: 
 ``` pytest test_functions.py ```
-> in the Commandline Interface to test if the program is going to execute properly  
+> in the Commandline Interface to test if the programs functions

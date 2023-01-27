@@ -1,3 +1,6 @@
 venv/
 .idea/
-app.config
+.pytest_cache/
+__pycache__/
+config/app.config
+saved_entries/
