@@ -74,6 +74,7 @@ if __name__ == '__main__':
             if user_input == 'y':
                 api_output = get_form_info()
                 save_response_as_file(api_output)
+                print("\nFile Entries Saved")
             else:
                 start_prog = input("To continue press c"
                                    "\n other keys to exit"

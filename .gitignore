@@ -3,4 +3,5 @@ venv/
 .pytest_cache/
 __pycache__/
 config/app.config
-saved_entries/
+.github
+*.json
