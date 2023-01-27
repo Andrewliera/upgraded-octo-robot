@@ -1,5 +1,5 @@
-# Cubes Project
-by: Andrew Gonzaga
+# Andrew Gonzaga's Cubes Project
+
 ### Cubes Project Done in Python
 
 --------------------------------------------------------------
