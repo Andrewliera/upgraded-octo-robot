@@ -1,4 +1,5 @@
 import configparser
+import os
 import urllib.request
 import json
 
@@ -48,6 +49,10 @@ def get_form_info():
 
 def save_response_as_file(response):
     f = 'saved_entries/my_entries.json'
+    try:
+        os.makedirs("saved_entries")
+    except FileExistsError:
+        pass
     try:
         f = open(f, "w")
         print("Files Exists!")
