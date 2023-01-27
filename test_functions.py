@@ -1,6 +1,3 @@
-from main import get_form_info
-
-
 def test_config():
     pass
 
