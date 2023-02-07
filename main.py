@@ -2,6 +2,8 @@ import configparser
 import os
 import urllib.request
 import json
+from typing import Tuple
+import sqlite3
 
 
 class BadInput(Exception):
@@ -61,8 +63,95 @@ def save_response_as_file(response):
         print("File Created!")
 
     json_data = json.load(response)
-    json.dump(json_data, f, indent=4, sort_keys=True)
+    json.dump(json_data, f, indent=4, sort_keys=False)
     f.write("\n")
+
+
+#def make_db(cursor: sqlite3.Cursor):
+#    cursor.execute('''
+#    CREATE TABLE IF NOT EXISTS submitted_forms (
+#    ''')
+
+
+def format_data_to_db():
+    try:
+        bar = open('./saved_entries/my_entries.json')
+        foo = json.load(bar)
+    except IOError:
+        raise IOError
+
+    for entry in foo['Entries']:
+        e_id = entry['EntryId']
+        suffix = entry['Field1']
+        f_name = entry['Field2']
+        l_name = entry['Field3']
+        title = entry['Field6']
+        org_name = entry['Field7']
+        email = entry['Field8']
+        org_site = entry['Field9']
+        phone = entry['Field10']
+        proj = entry['Field11']
+        guest_speaker = entry['Field12']
+        site_visit = entry['Field13']
+        job_shadow = entry['Field14']
+        internship = entry['Field15']
+        career_panel = entry['Field16']
+        networking_event = entry['Field17']
+        summer = entry['Field111']
+        fall = entry['Field112']
+        spring = entry['Field113']
+        summer_2 = entry['Field114']
+        other = entry['Field115']
+        discussion = entry['Field211']
+        print(e_id)
+    print("hello")
+
+
+def setup_db(cursor: sqlite3.Cursor):
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS entries (
+    e_id INTEGER PRIMARY KEY,
+    suffix TEXT,
+    f_name TEXT NOT NULL,
+    l_name TEXT NOT NULL,
+    title TEXT NOT NULL,
+    org_name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    org_site TEXT,
+    phone TEXT,
+    proj TEXT,
+    guest_speaker TEXT,
+    site_visit TEXT,
+    job_shadow TEXT,
+    internship TEXT,
+    career_panel TEXT,
+    networking_event TEXT,
+    summer TEXT,
+    fall TEXT,
+    spring TEXT,
+    summer_2 TEXT,
+    other TEXT,
+    discussion TEXT default 'No',
+    date_created date default GETDATE()
+    PRIMARY KEY (e_id, l_name)
+    ''')
+
+
+def configure_db():
+    conn, cursor = open_db("test_db.sqlite")
+    print(type(conn))
+    close_db(conn)
+
+
+def open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:
+    db_connection = sqlite3.connect(filename)
+    cursor = db_connection.cursor()
+    return db_connection, cursor
+
+
+def close_db(connection: sqlite3.Connection):
+    connection.commit()
+    connection.close()
 
 
 if __name__ == '__main__':
@@ -79,6 +168,8 @@ if __name__ == '__main__':
             if user_input == 'y':
                 api_output = get_form_info()
                 save_response_as_file(api_output)
+                format_data_to_db()
+                configure_db()
                 print("\nFile Entries Saved")
             else:
                 start_prog = input("To continue press c"

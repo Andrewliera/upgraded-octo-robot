@@ -1,3 +1,6 @@
+import main
+
+
 def test_config():
     pass
 
