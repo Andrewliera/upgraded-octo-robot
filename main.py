@@ -2,20 +2,23 @@ import configparser
 import os
 import urllib.request
 import json
-from typing import Tuple
 import sqlite3
+from typing import Tuple
 
 
 class BadInput(Exception):
-    print("Bad input used in program")
+    """Exception raised in user input"""
+    pass
 
 
 class BadConfig(Exception):
-    print("Bad Key Configured")
+    """Exception raised in app configuration"""
+    pass
 
 
 class GetFormError(Exception):
-    print("New Error raised getting form")
+    """Exception raised while getting form information"""
+    pass
 
 
 class TempKey:
@@ -44,7 +47,6 @@ def get_form_info():
             TempKey.baseurl + TempKey.identifier + '/entries.json'
         )
         return response
-
     except GetFormError:
         raise GetFormError
 
@@ -67,13 +69,7 @@ def save_response_as_file(response):
     f.write("\n")
 
 
-#def make_db(cursor: sqlite3.Cursor):
-#    cursor.execute('''
-#    CREATE TABLE IF NOT EXISTS submitted_forms (
-#    ''')
-
-
-def format_data_to_db():
+def format_data_to_db(cursor: sqlite3.Cursor):
     try:
         bar = open('./saved_entries/my_entries.json')
         foo = json.load(bar)
@@ -104,12 +100,19 @@ def format_data_to_db():
         other = entry['Field115']
         discussion = entry['Field211']
         print(e_id)
-    print("hello")
+        cursor.execute('''INSERT INTO entries VALUES
+        (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        ON CONFLICT do nothing;''',
+                       (e_id, suffix, l_name, f_name, title,
+                        org_name, email, org_site, phone, proj,
+                        guest_speaker, site_visit, job_shadow,
+                        internship, career_panel, networking_event,
+                        summer, fall, spring, summer_2, other, discussion))
 
 
 def setup_db(cursor: sqlite3.Cursor):
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS entries (
+
+    cursor.execute('''CREATE TABLE IF NOT EXISTS entries(
     e_id INTEGER PRIMARY KEY,
     suffix TEXT,
     f_name TEXT NOT NULL,
@@ -131,15 +134,14 @@ def setup_db(cursor: sqlite3.Cursor):
     spring TEXT,
     summer_2 TEXT,
     other TEXT,
-    discussion TEXT default 'No',
-    date_created date default GETDATE()
-    PRIMARY KEY (e_id, l_name)
-    ''')
+    discussion TEXT default 'No');''')
 
 
 def configure_db():
     conn, cursor = open_db("test_db.sqlite")
+    setup_db(cursor)
     print(type(conn))
+    format_data_to_db(cursor)
     close_db(conn)
 
 
@@ -168,7 +170,6 @@ if __name__ == '__main__':
             if user_input == 'y':
                 api_output = get_form_info()
                 save_response_as_file(api_output)
-                format_data_to_db()
                 configure_db()
                 print("\nFile Entries Saved")
             else:
