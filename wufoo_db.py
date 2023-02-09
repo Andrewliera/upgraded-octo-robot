@@ -44,7 +44,7 @@ def format_data_to_db(cursor: sqlite3.Cursor, filename: str):
 
 
 def delete_entry(cursor: sqlite3.Cursor, entry: str):
-    cursor.execute('''DELETE FROM entries 
+    cursor.execute('''DELETE FROM entries
     WHERE e_id like ?;''', entry)
 
 
