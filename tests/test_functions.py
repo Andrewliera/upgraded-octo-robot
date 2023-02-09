@@ -1,3 +1,4 @@
+
 def test_config():
     foo = "[secrets]\n"
     f = open("./config/app.config", "r")
@@ -5,5 +6,5 @@ def test_config():
     assert foo in lines
 
 
-def test_1():
+def test_connection():
     pass
