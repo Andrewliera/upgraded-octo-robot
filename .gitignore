@@ -4,4 +4,7 @@ venv/
 __pycache__/
 config/app.config
 .github
+/tests
+*.sqlite
 *.json
+

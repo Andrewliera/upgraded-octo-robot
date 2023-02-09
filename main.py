@@ -2,8 +2,7 @@ import configparser
 import os
 import urllib.request
 import json
-import sqlite3
-from typing import Tuple
+import wufoo_db
 
 
 class BadInput(Exception):
@@ -51,114 +50,26 @@ def get_form_info():
         raise GetFormError
 
 
-def save_response_as_file(response):
-    f = 'saved_entries/my_entries.json'
+def save_response_as_file(response, filename: str):
+    f = f'saved_entries/{filename}'
     try:
         os.makedirs("saved_entries")
     except FileExistsError:
         pass
     try:
         f = open(f, "w")
-        print("Files Exists!")
     except IOError:
-        f = open(f, 'w+')
-        print("File Created!")
-
+        f = open(f, 'r+')
     json_data = json.load(response)
     json.dump(json_data, f, indent=4, sort_keys=False)
     f.write("\n")
 
 
-def format_data_to_db(cursor: sqlite3.Cursor):
-    try:
-        bar = open('./saved_entries/my_entries.json')
-        foo = json.load(bar)
-    except IOError:
-        raise IOError
-
-    for entry in foo['Entries']:
-        e_id = entry['EntryId']
-        suffix = entry['Field1']
-        f_name = entry['Field2']
-        l_name = entry['Field3']
-        title = entry['Field6']
-        org_name = entry['Field7']
-        email = entry['Field8']
-        org_site = entry['Field9']
-        phone = entry['Field10']
-        proj = entry['Field11']
-        guest_speaker = entry['Field12']
-        site_visit = entry['Field13']
-        job_shadow = entry['Field14']
-        internship = entry['Field15']
-        career_panel = entry['Field16']
-        networking_event = entry['Field17']
-        summer = entry['Field111']
-        fall = entry['Field112']
-        spring = entry['Field113']
-        summer_2 = entry['Field114']
-        other = entry['Field115']
-        discussion = entry['Field211']
-        print(e_id)
-        cursor.execute('''INSERT INTO entries VALUES
-        (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-        ON CONFLICT do nothing;''',
-                       (e_id, suffix, l_name, f_name, title,
-                        org_name, email, org_site, phone, proj,
-                        guest_speaker, site_visit, job_shadow,
-                        internship, career_panel, networking_event,
-                        summer, fall, spring, summer_2, other, discussion))
-
-
-def setup_db(cursor: sqlite3.Cursor):
-
-    cursor.execute('''CREATE TABLE IF NOT EXISTS entries(
-    e_id INTEGER PRIMARY KEY,
-    suffix TEXT,
-    f_name TEXT NOT NULL,
-    l_name TEXT NOT NULL,
-    title TEXT NOT NULL,
-    org_name TEXT NOT NULL,
-    email TEXT NOT NULL,
-    org_site TEXT,
-    phone TEXT,
-    proj TEXT,
-    guest_speaker TEXT,
-    site_visit TEXT,
-    job_shadow TEXT,
-    internship TEXT,
-    career_panel TEXT,
-    networking_event TEXT,
-    summer TEXT,
-    fall TEXT,
-    spring TEXT,
-    summer_2 TEXT,
-    other TEXT,
-    discussion TEXT default 'No');''')
-
-
-def configure_db():
-    conn, cursor = open_db("test_db.sqlite")
-    setup_db(cursor)
-    print(type(conn))
-    format_data_to_db(cursor)
-    close_db(conn)
-
-
-def open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:
-    db_connection = sqlite3.connect(filename)
-    cursor = db_connection.cursor()
-    return db_connection, cursor
-
-
-def close_db(connection: sqlite3.Connection):
-    connection.commit()
-    connection.close()
-
-
 if __name__ == '__main__':
     print("Welcome to a simple Wufoo form checker")
     try:
+        db_file = 'my_form_db.sqlite'
+        entry_file = 'my_entries.json'
         start_prog = input("To continue press c"
                            "\nother keys to exit"
                            "\nYour Input: ")
@@ -169,15 +80,13 @@ if __name__ == '__main__':
                                "\nYour Input: ")
             if user_input == 'y':
                 api_output = get_form_info()
-                save_response_as_file(api_output)
-                configure_db()
+                save_response_as_file(api_output, entry_file)
+                wufoo_db.configure_db(db_file, entry_file)
                 print("\nFile Entries Saved")
             else:
                 start_prog = input("To continue press c"
                                    "\n other keys to exit"
                                    "\nYour Input: ")
-
         print("Exiting Program")
-
     except BadInput:
         raise BadInput()
