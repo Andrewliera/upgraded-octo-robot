@@ -7,4 +7,3 @@ def test_config():
 
 def test_1():
     pass
-
