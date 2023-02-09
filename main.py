@@ -33,7 +33,7 @@ class TempKey:
         raise BadConfig
 
 
-def get_form_info():
+def get_form_info():  # comment for workflow
     try:
         password_manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()
         password_manager.add_password(
