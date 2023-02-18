@@ -4,11 +4,13 @@
 
 --------------------------------------------------------------
 
-** Dependencies **
+**Dependencies**
+
+- PySide6
 
 --------------------------------------------------------------
 
-** Build Steps **
+**Build Steps**
 
 1. Open the Project in an editor of your choice
 2. add an app.config file to your copy of the project
@@ -18,7 +20,7 @@
 
 --------------------------------------------------------------
 
-** Test Steps **
+**Test Steps**
 
 > A test_functions.py file is there to test the functions of the project use: 
 ``` pytest test_functions.py ```
