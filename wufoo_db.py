@@ -48,6 +48,12 @@ def delete_entry(cursor: sqlite3.Cursor, entry: str):
     WHERE e_id like ?;''', entry)
 
 
+def select_all(cursor: sqlite3.Cursor):
+    cursor.execute('''SELECT * FROM entries;''')
+    query = cursor.fetchall()
+    return query
+
+
 def setup_db(cursor: sqlite3.Cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS entries(
     e_id INTEGER PRIMARY KEY,

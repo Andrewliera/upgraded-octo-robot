@@ -4,12 +4,13 @@ from PySide6 import QtWidgets, QtSql
 
 
 class MyGui(QtWidgets.QMainWindow):
-    def __init__(self, parent=None):
+    def __init__(self, filename: str, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Wufoo Form Viewer")
+
         # connect to local db
         self.db = QtSql.QSqlDatabase.addDatabase('QSQLITE')
-        self.db.setDatabaseName('my_form_db.sqlite')
+        self.db.setDatabaseName(filename)
         self.db.open()
 
         # configure gui model from db
@@ -79,13 +80,11 @@ class MyGui(QtWidgets.QMainWindow):
         self.view_entry_layout.addLayout(checkbox_set_one_layout)
         self.view_entry_layout.addLayout(checkbox_set_two_layout)
         full_widget.setLayout(self.view_entry_layout)
-        # configure main widget from table
+
         list_widget = QtWidgets.QListWidget()
         tab_layout = QtWidgets.QHBoxLayout()
         tab_layout.addWidget(list_widget, 1)
         tab_layout.addWidget(full_widget, 2)
-        # tab_layout.addWidget(text_widget, 4)
-
         view_entry_list = QtWidgets.QWidget()
         view_entry_list.setLayout(tab_layout)
 
@@ -93,7 +92,6 @@ class MyGui(QtWidgets.QMainWindow):
         tabs.setTabPosition(QtWidgets.QTabWidget.North)
         tabs.setMovable(True)
         tabs.setDocumentMode(True)
-
         tabs.addTab(view_entry_list, "View Entries")
         tabs.addTab(self.table_view, "View Database Table")
 
@@ -102,6 +100,7 @@ class MyGui(QtWidgets.QMainWindow):
         for column in range(num_of_entries):
             column_index = self.model.index(column, 0)
             column_data.append(self.model.data(column_index))
+
         # check the data you have is the one *think* it should be
         for i in range(len(column_data)):
             list_widget.addItem(str(column_data[i]))
@@ -188,14 +187,12 @@ class MyGui(QtWidgets.QMainWindow):
                 pass
 
 
-def run_gui():
+def run_gui(filename: str):
     app = QtWidgets.QApplication()
-    window = MyGui()
+    window = MyGui(filename)
     window.show()
     with open("styles/style.qss", "r")as f:
-        _style = f.read()
-        app.setStyleSheet(_style)
-    sys.exit(app.exec())
-
-
-run_gui()
+        custom_style = f.read()
+        app.setStyleSheet(custom_style)
+    app.exec()
+    sys.exit()
