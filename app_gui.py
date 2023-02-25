@@ -135,9 +135,9 @@ class MyGui(QtWidgets.QMainWindow):
         self.entry_email_label.setText(entry_email)
         self.entry_org_site_label.setText(entry_orgsite)
         self.entry_phone_label.setText(entry_phone)
-        self.checkboxes(row_data[9:19])
+        self.update_checkboxes(row_data[9:19])
 
-    def checkboxes(self, checkbox_data: list):
+    def update_checkboxes(self, checkbox_data: list):
         self.proj_checkbox.setChecked(False)
         self.guest_checkbox.setChecked(False)
         self.site_visit_checkbox.setChecked(False)
