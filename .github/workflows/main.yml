@@ -29,7 +29,9 @@ jobs:
         APIKEY: ${{ secrets.SECRET_API_KEY }}
         IDENTIFIER: ${{ secrets.IDENTIFIER }}
         PASSWD: ${{ secrets.PASSWD }}
+
       run: |
+        mkdir /config
         touch /config/app.config
         echo '[secrets]' >> /config/app.config
         echo 'baseurl = "'$BASEURL'"' >> /config/app.config
