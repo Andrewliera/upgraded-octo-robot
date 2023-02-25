@@ -151,47 +151,31 @@ class MyGui(QtWidgets.QMainWindow):
         self.fall_checkbox.setChecked(False)
         self.summer2_checkbox.setChecked(False)
 
+        comparison_data = {'Course Project': 'self.proj_checkbox.setChecked(True)',
+                           'Guest Speaker': 'self.guest_checkbox.setChecked(True)',
+                           'Site Visit': 'self.site_visit_checkbox.setChecked(True)',
+                           'Job Shadow': 'self.job_shadow_checkbox.setChecked(True)',
+                           'Internships': 'self.internship_checkbox.setChecked(True)',
+                           'Career Panel': 'self.career_checkbox.setChecked(True)',
+                           'Networking Event': 'self.networking_checkbox.setChecked(True)',
+                           'Summer 2022 (Juner 2022 - August 2022 )':
+                               'self.summer_checkbox.setChecked(True)',
+                           ' Fall 2022 (September 2022- December 2022)':
+                               'self.fall_checkbox.setChecked(True)',
+                           ' Spring 2023 (January 2023- April 2023)':
+                               'self.spring_checkbox.setChecked(True)'}
+
         for i in range(len(checkbox_data)):
-
-            if checkbox_data[i] == 'Course Project':
-                self.proj_checkbox.setChecked(True)
-
-            elif checkbox_data[i] == 'Guest Speaker':
-                self.guest_checkbox.setChecked(True)
-
-            elif checkbox_data[i] == 'Site Visit':
-                self.site_visit_checkbox.setChecked(True)
-
-            elif checkbox_data[i] == 'Job Shadow':
-                self.job_shadow_checkbox.setChecked(True)
-
-            elif checkbox_data[i] == 'Internships':
-                self.internship_checkbox.setChecked(True)
-
-            elif checkbox_data[i] == 'Career Panel':
-                self.career_checkbox.setChecked(True)
-
-            elif checkbox_data[i] == 'Networking Event':
-                self.networking_checkbox.setChecked(True)
-
-            elif checkbox_data[i] == 'Summer 2022 (Juner 2022 - August 2022 )':
-                self.summer_checkbox.setChecked(True)
-
-            elif checkbox_data[i] == \
-                    ' Fall 2022 (September 2022- December 2022)':
-                self.fall_checkbox.setChecked(True)
-
-            elif checkbox_data[i] == 'Spring 2023 (January 2023- April 2023)':
-                self.spring_checkbox.setChecked(True)
-            else:
-                pass
+            if checkbox_data[i] in comparison_data:
+                item = comparison_data.get(checkbox_data[i])
+                eval(item)
 
 
 def run_gui(filename: str):
     app = QtWidgets.QApplication()
     window = MyGui(filename)
     window.show()
-    with open("styles/style.qss", "r")as f:
+    with open("styles/style.qss", "r") as f:
         custom_style = f.read()
         app.setStyleSheet(custom_style)
     app.exec()
