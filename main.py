@@ -2,7 +2,6 @@ import get_wufuu_info
 import wufoo_db
 import app_gui
 
-
 if __name__ == '__name__':
     entry_file = 'my_entries.json'
     db_file = 'my_form_db.sqlite'

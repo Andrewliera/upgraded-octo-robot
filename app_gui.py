@@ -1,3 +1,4 @@
+# I need to really redo this portion
 import sys
 from PySide6 import QtWidgets, QtSql
 
@@ -17,7 +18,6 @@ class MyGui(QtWidgets.QMainWindow):
         self.model.select()
         self.table_view = QtWidgets.QTableView()
         self.table_view.setModel(self.model)
-        self.vertical_header = self.table_view.verticalHeader()
 
         # make form
         top_layout = QtWidgets.QFormLayout()
@@ -29,47 +29,56 @@ class MyGui(QtWidgets.QMainWindow):
         org_site_label = QtWidgets.QLabel("org site")
         phone_label = QtWidgets.QLabel("phone")
 
-        top_layout.addRow(title_label, QtWidgets.QLineEdit())
-        top_layout.addRow(f_name_label, QtWidgets.QLineEdit())
-        top_layout.addRow(l_name_label, QtWidgets.QLineEdit())
-        top_layout.addRow(org_label, QtWidgets.QLineEdit())
-        top_layout.addRow(email_label, QtWidgets.QLineEdit())
-        top_layout.addRow(org_site_label, QtWidgets.QLineEdit())
-        top_layout.addRow(phone_label, QtWidgets.QLineEdit())
+        self.entry_title_label = QtWidgets.QLineEdit()
+        self.entry_fname_label = QtWidgets.QLineEdit()
+        self.entry_lname_label = QtWidgets.QLineEdit()
+        self.entry_org_label = QtWidgets.QLineEdit()
+        self.entry_email_label = QtWidgets.QLineEdit()
+        self.entry_org_site_label = QtWidgets.QLineEdit()
+        self.entry_phone_label = QtWidgets.QLineEdit()
+
+        top_layout.addRow(title_label, self.entry_title_label)
+        top_layout.addRow(f_name_label, self.entry_fname_label)
+        top_layout.addRow(l_name_label, self.entry_lname_label)
+        top_layout.addRow(org_label, self.entry_org_label)
+        top_layout.addRow(email_label, self.entry_email_label)
+        top_layout.addRow(org_site_label, self.entry_org_site_label)
+        top_layout.addRow(phone_label, self.entry_phone_label)
 
         # add checkboxes
         checkbox_set_one_layout = QtWidgets.QVBoxLayout()
-        proj_checkbox = QtWidgets.QCheckBox("project")
-        guest_checkbox = QtWidgets.QCheckBox("guest")
-        site_visit_checkbox = QtWidgets.QCheckBox("site vist")
-        job_shadow_checkbox = QtWidgets.QCheckBox("job shadow")
-        internship_checkbox = QtWidgets.QCheckBox("internship")
-        networking_checkbox = QtWidgets.QCheckBox("networking")
-
-        checkbox_set_one_layout.addWidget(proj_checkbox)
-        checkbox_set_one_layout.addWidget(guest_checkbox)
-        checkbox_set_one_layout.addWidget(site_visit_checkbox)
-        checkbox_set_one_layout.addWidget(job_shadow_checkbox)
-        checkbox_set_one_layout.addWidget(internship_checkbox)
-        checkbox_set_one_layout.addWidget(networking_checkbox)
+        self.proj_checkbox = QtWidgets.QCheckBox("project")
+        self.guest_checkbox = QtWidgets.QCheckBox("guest")
+        self.site_visit_checkbox = QtWidgets.QCheckBox("site vist")
+        self.job_shadow_checkbox = QtWidgets.QCheckBox("job shadow")
+        self.internship_checkbox = QtWidgets.QCheckBox("internship")
+        self.career_checkbox = QtWidgets.QCheckBox("Career Panel")
+        self.networking_checkbox = QtWidgets.QCheckBox("networking")
+        checkbox_set_one_layout.addWidget(self.proj_checkbox)
+        checkbox_set_one_layout.addWidget(self.guest_checkbox)
+        checkbox_set_one_layout.addWidget(self.site_visit_checkbox)
+        checkbox_set_one_layout.addWidget(self.job_shadow_checkbox)
+        checkbox_set_one_layout.addWidget(self.internship_checkbox)
+        checkbox_set_one_layout.addWidget(self.career_checkbox)
+        checkbox_set_one_layout.addWidget(self.networking_checkbox)
 
         checkbox_set_two_layout = QtWidgets.QVBoxLayout()
-        summer_checkbox = QtWidgets.QCheckBox("summer")
-        spring_checkbox = QtWidgets.QCheckBox("spring")
-        winter_checkbox = QtWidgets.QCheckBox("winter")
-        summer2_checkbox = QtWidgets.QCheckBox("summer2")
+        self.summer_checkbox = QtWidgets.QCheckBox("Summer 2022")
+        self.fall_checkbox = QtWidgets.QCheckBox("Fall 2022")
+        self.spring_checkbox = QtWidgets.QCheckBox("Spring 2023")
+        self.summer2_checkbox = QtWidgets.QCheckBox("Summer 2023")
 
-        checkbox_set_two_layout.addWidget(summer_checkbox)
-        checkbox_set_two_layout.addWidget(spring_checkbox)
-        checkbox_set_two_layout.addWidget(winter_checkbox)
-        checkbox_set_two_layout.addWidget(summer2_checkbox)
+        checkbox_set_two_layout.addWidget(self.summer_checkbox)
+        checkbox_set_two_layout.addWidget(self.spring_checkbox)
+        checkbox_set_two_layout.addWidget(self.fall_checkbox)
+        checkbox_set_two_layout.addWidget(self.summer2_checkbox)
 
         full_widget = QtWidgets.QWidget()
-        view_entry_layout = QtWidgets.QVBoxLayout()
-        view_entry_layout.addLayout(top_layout)
-        view_entry_layout.addLayout(checkbox_set_one_layout)
-        view_entry_layout.addLayout(checkbox_set_two_layout)
-        full_widget.setLayout(view_entry_layout)
+        self.view_entry_layout = QtWidgets.QVBoxLayout()
+        self.view_entry_layout.addLayout(top_layout)
+        self.view_entry_layout.addLayout(checkbox_set_one_layout)
+        self.view_entry_layout.addLayout(checkbox_set_two_layout)
+        full_widget.setLayout(self.view_entry_layout)
         # configure main widget from table
         list_widget = QtWidgets.QListWidget()
         tab_layout = QtWidgets.QHBoxLayout()
@@ -86,7 +95,7 @@ class MyGui(QtWidgets.QMainWindow):
         tabs.setDocumentMode(True)
 
         tabs.addTab(view_entry_list, "View Entries")
-        tabs.addTab(self.table_view, "View Database")
+        tabs.addTab(self.table_view, "View Database Table")
 
         num_of_entries = self.model.rowCount()
         column_data = []
@@ -97,7 +106,86 @@ class MyGui(QtWidgets.QMainWindow):
         for i in range(len(column_data)):
             list_widget.addItem(str(column_data[i]))
 
+        list_widget.itemClicked.connect(self.update_entry)
         self.setCentralWidget(tabs)
+
+    def update_entry(self, item):
+
+        # take the entry # and use it to
+        # get the row of info from the uploaded db model
+        item = item.text()
+        num_of_rows = self.model.columnCount()
+        row_data = []
+        for row in range(num_of_rows):
+            row_index = (self.model.index(int(item) - 1, row))
+            row_data.append(self.model.data(row_index))
+
+        # take items from data and update the form view
+        entry_title = row_data[4]
+        entry_fname = row_data[3]
+        entry_lname = row_data[2]
+        entry_orgname = row_data[5]
+        entry_email = row_data[6]
+        entry_orgsite = row_data[7]
+        entry_phone = row_data[8]
+
+        self.entry_title_label.setText(entry_title)
+        self.entry_fname_label.setText(entry_fname)
+        self.entry_lname_label.setText(entry_lname)
+        self.entry_org_label.setText(entry_orgname)
+        self.entry_email_label.setText(entry_email)
+        self.entry_org_site_label.setText(entry_orgsite)
+        self.entry_phone_label.setText(entry_phone)
+        self.checkboxes(row_data[9:19])
+
+    def checkboxes(self, checkbox_data: list):
+        self.proj_checkbox.setChecked(False)
+        self.guest_checkbox.setChecked(False)
+        self.site_visit_checkbox.setChecked(False)
+        self.job_shadow_checkbox.setChecked(False)
+        self.internship_checkbox.setChecked(False)
+        self.career_checkbox.setChecked(False)
+        self.networking_checkbox.setChecked(False)
+
+        self.summer_checkbox.setChecked(False)
+        self.fall_checkbox.setChecked(False)
+        self.fall_checkbox.setChecked(False)
+        self.summer2_checkbox.setChecked(False)
+
+        for i in range(len(checkbox_data)):
+
+            if checkbox_data[i] == 'Course Project':
+                self.proj_checkbox.setChecked(True)
+
+            elif checkbox_data[i] == 'Guest Speaker':
+                self.guest_checkbox.setChecked(True)
+
+            elif checkbox_data[i] == 'Site Visit':
+                self.site_visit_checkbox.setChecked(True)
+
+            elif checkbox_data[i] == 'Job Shadow':
+                self.job_shadow_checkbox.setChecked(True)
+
+            elif checkbox_data[i] == 'Internships':
+                self.internship_checkbox.setChecked(True)
+
+            elif checkbox_data[i] == 'Career Panel':
+                self.career_checkbox.setChecked(True)
+
+            elif checkbox_data[i] == 'Networking Event':
+                self.networking_checkbox.setChecked(True)
+
+            elif checkbox_data[i] == 'Summer 2022 (Juner 2022 - August 2022 )':
+                self.summer_checkbox.setChecked(True)
+
+            elif checkbox_data[i] == \
+                    ' Fall 2022 (September 2022- December 2022)':
+                self.fall_checkbox.setChecked(True)
+
+            elif checkbox_data[i] == 'Spring 2023 (January 2023- April 2023)':
+                self.spring_checkbox.setChecked(True)
+            else:
+                pass
 
 
 def run_gui():

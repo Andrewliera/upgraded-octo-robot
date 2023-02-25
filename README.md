@@ -20,6 +20,13 @@
 
 --------------------------------------------------------------
 
+**Gui**
+1. Two Tabs will be generated, View Entries And View Data Table
+2. Use the Database Table tab to view all entries in the Database
+3. Use the View Entries to see individual Forms
+4. Each number of the list corresponds to its entry in the Database
+
+--------------------------------------------------------------
 **Test Steps**
 
 > A test_functions.py file is there to test the functions of the project use: 
