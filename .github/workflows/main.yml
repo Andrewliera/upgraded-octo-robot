@@ -30,12 +30,12 @@ jobs:
         IDENTIFIER: ${{ secrets.IDENTIFIER }}
         PASSWD: ${{ secrets.PASSWD }}
       run: |
-        touch ../../../config/app.config
-        echo '[secrets]' >> /config/app.config
-        echo 'baseurl = "'$BASEURL'"' >> /config/app.config
-        echo 'apikey = "'$APIKEY'"' >> /config/app.config
-        echo 'identifier = "'$IDENTIFIER'"' >> /config/app.config
-        echo 'passwd = "'$PASSWD'"' >> /config/app.config
+        touch app.config
+        echo '[secrets]' >> app.config
+        echo 'baseurl = "'$BASEURL'"' >> app.config
+        echo 'apikey = "'$APIKEY'"' >> app.config
+        echo 'identifier = "'$IDENTIFIER'"' >> app.config
+        echo 'passwd = "'$PASSWD'"' >> pp.config
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
