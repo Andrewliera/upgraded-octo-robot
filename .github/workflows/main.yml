@@ -30,7 +30,7 @@ jobs:
         IDENTIFIER: ${{ secrets.IDENTIFIER }}
         PASSWD: ${{ secrets.PASSWD }}
       run: |
-        pwd
+        ls
         touch app.config
         echo '[secrets]' >> app.config
         echo 'baseurl = "'$BASEURL'"' >> app.config
