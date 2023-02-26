@@ -1,9 +1,9 @@
 import json
 import os
 import app_gui
-import get_wufuu_info
 import pytest
 import wufoo_db
+import get_wufuu_info
 
 
 def test_retrieve_data():
@@ -48,7 +48,9 @@ def test_populated_gui(test_app):
                  'Career Panel',
                  ]
     test_app.update_checkboxes(test_data)
-    assert test_app.proj_checkbox.isChecked() and test_app.guest_checkbox.isChecked()
+    assert test_app.proj_checkbox.isChecked() \
+           and test_app.guest_checkbox.isChecked() \
+           and test_app.site_visit_checkbox.isChecked()
 
 
 def remove_test_files(filename: str):
@@ -74,3 +76,6 @@ def clean_up():
     remove_test_files(f'{path}{test_file}')
     remove_test_files(test_database)
     remove_test_folder(path)
+
+
+clean_up()
