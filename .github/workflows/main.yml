@@ -30,13 +30,11 @@ jobs:
         IDENTIFIER: ${{ secrets.IDENTIFIER }}
         PASSWD: ${{ secrets.PASSWD }}
       run: |
-        ls
         echo '[secrets]' >> config/app.config
         echo 'baseurl = "'$BASEURL'"' >> config/app.config
         echo 'apikey = "'$APIKEY'"' >> config/app.config
         echo 'identifier = "'$IDENTIFIER'"' >> config/app.config
         echo 'passwd = "'$PASSWD'"' >> config/app.config
-        cat config
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
