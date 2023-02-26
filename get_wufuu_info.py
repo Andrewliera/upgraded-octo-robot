@@ -45,11 +45,11 @@ def get_form_info():  # comment for workflow
 
 
 def save_response_as_file(response, filename: str):
-    f = f'saved_entries/{filename}'
     try:
         os.makedirs("saved_entries")
     except FileExistsError:
         pass
+    f = f'saved_entries/{filename}'
     try:
         f = open(f, "w")
     except IOError:

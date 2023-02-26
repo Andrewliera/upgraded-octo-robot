@@ -6,4 +6,3 @@ config/app.config
 .github
 *.sqlite
 *.json
-
