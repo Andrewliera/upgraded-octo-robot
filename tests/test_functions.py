@@ -1,8 +1,8 @@
 import json
 import os
+import app_gui
 import get_wufuu_info
 import pytest
-import app_gui
 import wufoo_db
 
 
