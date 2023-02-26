@@ -120,7 +120,6 @@ class MyGui(QtWidgets.QMainWindow):
             row_data.append(self.model.data(row_index))
 
         # take items from data and update the form view
-        print(row_data)
         entry_title = row_data[4]
         entry_fname = row_data[3]
         entry_lname = row_data[2]

@@ -26,10 +26,12 @@
 2. Use the Database Table tab to view all entries in the Database
 3. Use the View Entries to see individual Forms
 4. Each number of the list corresponds to its entry in the Database
+5. you may delete your .sqlite files or saved entries directory 
+they will be rewritten
 
 --------------------------------------------------------------
 **Test Steps**
 
 > A test_functions.py file is there to test the functions of the project use: 
-``` pytest test_functions.py ```
+``` pytest tests/test_functions.py ```
 > in the Commandline Interface to test if the programs functions
