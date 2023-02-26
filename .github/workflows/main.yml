@@ -36,8 +36,7 @@ jobs:
         echo 'apikey = "'$APIKEY'"' >> config/app.config
         echo 'identifier = "'$IDENTIFIER'"' >> config/app.config
         echo 'passwd = "'$PASSWD'"' >> config/app.config
-        cat config/
-        cat
+        cat config
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
