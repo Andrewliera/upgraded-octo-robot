@@ -40,7 +40,7 @@ jobs:
       env:
         DISPLAY: ':99.0'
       run: |
-        sudo apt update && sudo apt install --yes libgl1-mesa-dev xvfb-y
+        sudo apt update && sudo apt install --yes libgl1-mesa-dev xvfb -y
         sudo apt-get install x11-xkb-utils xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic x11-apps -y
         /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :0 -screen 0 1920x1200x24 -ac +extension GLX
         python -m pip install --upgrade pip
