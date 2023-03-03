@@ -39,7 +39,7 @@ jobs:
       run: |
         sudo apt update && sudo apt install --yes libgl1-mesa-dev
         python -m pip install --upgrade pip
-        pip install flake8 pytest pyside6
+        pip install flake8 pytest pyside6 pytest-qt
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint with flake8
       run: |
