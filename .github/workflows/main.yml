@@ -25,6 +25,7 @@ jobs:
         python-version: "3.10"
     - name: Build Secrets
       env:
+        DISPLAY: ':99.0'
         QT_DEBUG_PLUGINS: 1
         BASEURL: ${{ secrets.BASEURL }}
         APIKEY: ${{ secrets.SECRET_API_KEY }}
@@ -36,9 +37,12 @@ jobs:
         echo 'apikey = "'$APIKEY'"' >> config/app.config
         echo 'identifier = "'$IDENTIFIER'"' >> config/app.config
         echo 'passwd = "'$PASSWD'"' >> config/app.config
+    - name : build "display"
+      run: |
+        /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX
     - name: Install dependencies
       run: |
-        sudo apt update && sudo apt install --yes libgl1-mesa-dev libxkbcommon-x11-0
+        sudo apt update && sudo apt install --yes libgl1-mesa-dev
         python -m pip install --upgrade pip
         pip install flake8 pytest pyside6 pytest-qt
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
