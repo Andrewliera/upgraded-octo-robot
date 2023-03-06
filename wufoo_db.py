@@ -79,6 +79,13 @@ def setup_db(cursor: sqlite3.Cursor):
     other TEXT,
     discussion TEXT default 'No');''')
 
+    cursor.execute('''CREATE TABLE IF NOT EXISTS faculty(
+    email TEXT PRIMARY KEY,
+    f_name TEXT NOT NULL,
+    l_name TEXT NOT NULL,
+    title TEXT NOT NULL,
+    department TEXT NOT NULL);''')
+
 
 def configure_db(dbname: str, entry_filename: str):
     conn, cursor = open_db(dbname)
