@@ -54,6 +54,23 @@ def select_all(cursor: sqlite3.Cursor):
     return query
 
 
+def claim_entry(cursor: sqlite3.Cursor, claim: list):
+
+    entry_id = claim[0]
+    f_name = claim[1]
+    l_name = claim[2]
+    title = claim[3]
+    email = claim[4]
+    department = claim[5]
+
+    cursor.execute('''INSERT INTO faculty values
+    (?,?,?,?,?) ON CONFLICT DO NOTHING;''',
+                   (email, f_name, l_name, title, department))
+    cursor.execute('''UPDATE entries
+    SET proj_owner = ?
+    WHERE e_id = ?;''', (email, entry_id))
+
+
 def setup_db(cursor: sqlite3.Cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS entries(
     e_id INTEGER PRIMARY KEY,
@@ -87,9 +104,22 @@ def setup_db(cursor: sqlite3.Cursor):
     department TEXT NOT NULL);''')
 
 
+def format_claim(dbname: str, data: list):
+    conn, cursor = open_db(dbname)
+    setup_db(cursor)
+    claim_entry(cursor, data)
+    close_db(conn)
+
+
+def alter_db(cursor: sqlite3.Cursor):
+    cursor.execute('''ALTER TABLE entries
+    ADD COLUMN "proj_owner" TEXT;''')
+
+
 def configure_db(dbname: str, entry_filename: str):
     conn, cursor = open_db(dbname)
     setup_db(cursor)
+    alter_db(cursor)
     format_data_to_db(cursor, entry_filename)
     close_db(conn)
 
